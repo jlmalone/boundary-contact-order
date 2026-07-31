@@ -1,0 +1,602 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\simplex}{\Delta_{n-1}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\diag}{\operatorname{diag}}
+
+\title{Boundary Contact Order Governs Stationarity Preservation in Normalized Simplex Lifts}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Normalized nonnegative parametrizations convert optimization over a simplex into unconstrained smooth optimization, but their boundary singularities can hide the missing Karush--Kuhn--Tucker inequalities. We introduce the contact order of an inactive simplex coordinate and prove an exact finite-jet characterization. For a convex differentiable objective, a lifted point is critical through order $q$ precisely when its active partial derivatives agree and every inactive coordinate with contact order at most $q$ satisfies its missing KKT inequality. Consequently, preservation of simplex stationarity for arbitrary smooth objectives occurs at the sharp threshold given by the largest inactive contact order. Applied to deep Hadamard-product parametrizations, an inactive coordinate with $z$ zero factors has contact order $2z$. Ordinary second-order stationarity therefore sees exactly the coordinates with one zero factor, while coordinates with several zero factors require correspondingly higher jets. The same analysis produces exponentially many nonglobal second-order critical images for higher even-power lifts of a strongly convex quadratic. These results isolate a geometric quantity that determines which constrained optimality conditions a smooth lift can detect at finite order.
+\end{abstract}
+
+\section{Introduction}
+
+Let
+\[
+  \simplex=\left\{x\in\R^n_+:\sum_{i=1}^n x_i=1\right\}.
+\]
+A common way to remove the simplex constraint is to optimize the composition
+$F=f\circ\Phi$, where $f$ is defined near $\simplex$ and $\Phi$ is a
+normalized nonnegative map. The squared lift
+\[
+  \Phi_i(u)=\frac{u_i^2}{\sum_k u_k^2}
+\]
+is the best-known example. At a boundary point its Jacobian loses the
+directions that add a previously inactive coordinate. Second derivatives
+recover those directions and expose the corresponding KKT inequalities.
+
+This paper studies the general block-separable lift
+\begin{equation}\label{eq:lift}
+  \Phi_i(w)=\frac{a_i(w_i)}{A(w)},
+  \qquad
+  A(w)=\sum_{k=1}^n a_k(w_k),
+\end{equation}
+where the blocks $w_i$ are independent and every $a_i$ is smooth and
+nonnegative. The central quantity is the first nonzero Taylor order of
+$a_i$ at an inactive block. We call it the \emph{contact order}. It determines
+the first derivative order at which the lifted objective can test the
+missing KKT inequality for that coordinate.
+
+The main contributions are as follows.
+\begin{enumerate}[label=(\roman*)]
+  \item For convex differentiable objectives, we give an exact
+  characterization of finite-jet criticality in terms of active-gradient
+  equality and the KKT inequalities whose contact orders are visible to the
+  chosen jet.
+  \item For arbitrary smooth objectives, we identify a sharp universal
+  stationarity-preservation threshold: the jet order must reach the largest
+  inactive contact order.
+  \item For deep squared Hadamard products, we prove that contact order equals
+  twice the number of zero factors. Thus second-order stationarity detects a
+  missing coordinate exactly when it has one zero factor.
+  \item For tied even-power lifts, we exhibit an exponential family of
+  nonglobal second-order critical images for a strongly convex quadratic.
+\end{enumerate}
+
+The square-root simplex reparametrization and its second-order relation to
+simplex stationarity are established in prior work
+\cite{LiMcKenzieYin2023,LevinKileelBoumal2024}. General landscape-transfer
+results explain when first- and second-order critical points survive smooth
+parametrization \cite{LevinKileelBoumal2024}. Recent work also develops
+Hadamard parametrizations for structured optimization
+\cite{TangToh2024,OuyangEtAl2024,KolbEtAl2026}. The result here concerns higher
+finite jets at boundary points and gives an exact order-by-order test for
+normalized block-separable simplex lifts. Section~\ref{sec:related} states the
+novelty boundary more explicitly.
+
+\section{Setup and finite-jet criticality}\label{sec:setup}
+
+For each $i$, let $E_i$ be a finite-dimensional real vector space and let
+$U_i\subseteq E_i$ be open. Put $U=\prod_i U_i$. Fix an integer $Q\ge 1$.
+Assume throughout that
+\[
+  a_i\in C^Q(U_i),\qquad a_i\ge 0,
+\]
+and consider the open set $U^+=\{w\in U:A(w)>0\}$. The map \eqref{eq:lift}
+is $C^Q$ on $U^+$ and takes values in $\simplex$.
+
+Fix $\bar w\in U^+$ and write
+\[
+  \bar x=\Phi(\bar w),\qquad
+  S=\supp(\bar x)=\{i:a_i(\bar w_i)>0\},
+  \qquad A_0=A(\bar w).
+\]
+For active blocks we impose the nondegeneracy condition
+\begin{equation}\label{eq:active-nondegenerate}
+  Da_i(\bar w_i)\ne 0 \qquad (i\in S).
+\end{equation}
+This ensures that independent block perturbations generate all tangent
+directions within the active face.
+
+\begin{definition}[Finite contact order]\label{def:contact}
+For $j\notin S$, the function $a_j$ has \emph{contact order} $r_j$ at
+$\bar w_j$ if $2\le r_j\le Q$,
+\[
+  D^k a_j(\bar w_j)=0\quad(1\le k<r_j),
+  \qquad D^{r_j}a_j(\bar w_j)\ne 0.
+\]
+Equivalently, some $v_j\in E_j$ and some $c_j>0$ satisfy
+\begin{equation}\label{eq:contact-path}
+  a_j(\bar w_j+t v_j)=c_jt^{r_j}+o(t^{r_j}).
+\end{equation}
+We assume every inactive block under discussion has such a finite order.
+\end{definition}
+
+Nonnegativity forces each $r_j$ to be even. Indeed, if
+$P(v)=D^{r_j}a_j(\bar w_j)[v^{r_j}]/r_j!$ is the first nonzero homogeneous
+Taylor term, then $P(v)\ge0$ for all $v$. A nonzero odd homogeneous polynomial
+cannot be nonnegative because $P(-v)=-P(v)$.
+
+Our criticality definition records the Taylor sign along every curve. This
+form is convenient because the first visible boundary direction can occur at
+an order larger than two.
+
+\begin{definition}[$q$-jet criticality]\label{def:jet}
+Let $G$ be $C^q$ near $\bar w$. We call $\bar w$ \emph{$q$-jet critical} for
+$G$ if, for every $C^q$ curve $\gamma:(-\epsilon,\epsilon)\to U^+$ with
+$\gamma(0)=\bar w$, either
+\[
+  (G\circ\gamma)^{(k)}(0)=0\qquad(1\le k\le q),
+\]
+or the smallest $k\le q$ for which this derivative is nonzero is even and
+positive.
+\end{definition}
+
+For $q=1$, Definition~\ref{def:jet} is ordinary first-order criticality. For
+$q=2$, it is equivalent to zero gradient and positive-semidefinite Hessian.
+The definition is necessary, not sufficient, for a local minimum when
+$q>2$.
+
+\begin{proposition}[Coordinate invariance]\label{prop:invariance}
+Let $\psi_i:\widetilde U_i\to U_i$ be a $C^Q$ local diffeomorphism with
+$\psi_i(\bar z_i)=\bar w_i$, and put $\psi=(\psi_1,\ldots,\psi_n)$. Then
+$a_i\circ\psi_i$ has the same contact order at $\bar z_i$ as $a_i$ has at
+$\bar w_i$. Moreover, $\bar w$ is $q$-jet critical for $F$ if and only if
+$\bar z$ is $q$-jet critical for $F\circ\psi$.
+\end{proposition}
+
+\begin{proof}
+Let $r$ be the first nonzero Taylor order of $a_i$ at $\bar w_i$. The first
+nonzero homogeneous term of $a_i\circ\psi_i$ is
+\[
+  v\longmapsto
+  \frac1{r!}D^r a_i(\bar w_i)
+  [D\psi_i(\bar z_i)v]^r.
+\]
+The derivative $D\psi_i(\bar z_i)$ is invertible, so this polynomial is
+nonzero and every lower term vanishes. Thus the contact order is unchanged.
+The second assertion follows because a local $C^q$ diffeomorphism and its
+inverse give a bijection between the germs of $C^q$ curves through the two
+base points, without changing the scalar composition along corresponding
+curves.
+\end{proof}
+
+Let $f$ be differentiable near $\simplex$ and put
+\[
+  g=\nabla f(\bar x),\qquad g_i=\partial_i f(\bar x).
+\]
+The simplex KKT stationarity condition at $\bar x$ is
+\begin{equation}\label{eq:kkt}
+  g_i=\lambda\quad(i\in S),
+  \qquad
+  g_j\ge\lambda\quad(j\notin S)
+\end{equation}
+for some $\lambda\in\R$.
+
+\section{The contact-order theorem}\label{sec:main}
+
+\begin{theorem}[Exact convex finite-jet characterization]\label{thm:convex}
+Let $f$ be convex and $C^q$ on a neighborhood of $\simplex$, where
+$1\le q\le Q$. Suppose \eqref{eq:active-nondegenerate} holds and every
+$j\notin S$ has a finite contact order $r_j\le Q$. Then $\bar w$ is
+$q$-jet critical for $F=f\circ\Phi$ if and only if there exists
+$\lambda\in\R$ such that
+\begin{align}
+  g_i&=\lambda &&(i\in S),\label{eq:active-equality}\\
+  g_j&\ge\lambda &&(j\notin S\text{ with }r_j\le q).
+  \label{eq:visible-inequality}
+\end{align}
+No condition is imposed on an inactive index with $r_j>q$.
+\end{theorem}
+
+The theorem gives a complete filtration of the missing KKT inequalities. As
+$q$ increases, an inactive coordinate enters the stationarity test exactly at
+its contact order.
+
+Convexity is needed only for the sufficiency direction of the exact
+finite-jet characterization. The universal threshold for recovering
+first-order constrained stationarity does not require convexity.
+
+\begin{theorem}[Sharp universal stationarity threshold]\label{thm:threshold}
+Let $f$ be $C^q$ near $\simplex$ and retain the hypotheses on the lift. If
+$S\ne\{1,\ldots,n\}$ and
+\[
+  q\ge r_{\max}:=\max_{j\notin S}r_j,
+\]
+then $q$-jet criticality of $\bar w$ for $f\circ\Phi$ implies simplex KKT
+stationarity of $\bar x$ for $f$.
+
+The threshold is sharp over smooth objectives: if $q<r_j$ for some inactive
+$j$, the linear objective $f(x)=-x_j$ makes $\bar w$ $q$-jet critical while
+$\bar x$ violates simplex KKT stationarity. If $S=\{1,\ldots,n\}$, first-order
+criticality already implies stationarity.
+\end{theorem}
+
+\section{Proofs}\label{sec:proofs}
+
+We begin with the first-order calculation.
+
+\begin{lemma}[Active-face gradient equality]\label{lem:first-order}
+Under \eqref{eq:active-nondegenerate}, first-order criticality of $\bar w$ for
+$F=f\circ\Phi$ is equivalent to
+\[
+  g_i=\lambda\qquad(i\in S)
+\]
+for some $\lambda$.
+\end{lemma}
+
+\begin{proof}
+For any block direction $h=(h_1,\ldots,h_n)$, differentiation of
+\eqref{eq:lift} gives
+\begin{equation}\label{eq:first-variation}
+  DF(\bar w)[h]
+  =\frac{1}{A_0}\sum_{i=1}^n
+    (g_i-g^\top\bar x)Da_i(\bar w_i)[h_i].
+\end{equation}
+For $j\notin S$, nonnegativity and $a_j(\bar w_j)=0$ imply
+$Da_j(\bar w_j)=0$. Since the blocks are independent and
+$Da_i(\bar w_i)\ne0$ for $i\in S$, the right-hand side vanishes for every
+$h$ exactly when
+\[
+  g_i=g^\top\bar x\qquad(i\in S).
+\]
+Taking $\lambda=g^\top\bar x$ proves the claim. Conversely, this equality
+makes every term in \eqref{eq:first-variation} vanish.
+\end{proof}
+
+\begin{lemma}[Boundary jet identity]\label{lem:boundary-jet}
+Suppose active-gradient equality holds with value $\lambda$. For an inactive
+$j$, choose $v_j$ as in \eqref{eq:contact-path} and perturb only the $j$th
+block:
+\[
+  \gamma_j(t)=(\bar w_1,\ldots,\bar w_j+t v_j,\ldots,\bar w_n).
+\]
+Then
+\begin{equation}\label{eq:jet-identity}
+  (F\circ\gamma_j)^{(r_j)}(0)
+  =\frac{D^{r_j}a_j(\bar w_j)[v_j^{r_j}]}{A_0}
+   (g_j-\lambda).
+\end{equation}
+All lower derivatives vanish.
+\end{lemma}
+
+\begin{proof}
+Write $h(t)=a_j(\bar w_j+t v_j)$. Along the path,
+\[
+  \Phi(\gamma_j(t))
+  =\frac{A_0}{A_0+h(t)}\bar x
+   +\frac{h(t)}{A_0+h(t)}e_j.
+\]
+Hence
+\[
+  \Phi(\gamma_j(t))-\bar x
+  =\frac{h(t)}{A_0+h(t)}(e_j-\bar x)
+  =\frac{c_j}{A_0}(e_j-\bar x)t^{r_j}+o(t^{r_j}).
+\]
+Differentiability of $f$ yields
+\[
+  F(\gamma_j(t))-F(\bar w)
+  =\frac{c_j}{A_0}g^\top(e_j-\bar x)t^{r_j}
+   +o(t^{r_j}).
+\]
+Active-gradient equality gives $g^\top\bar x=\lambda$, while
+$r_j!c_j=D^{r_j}a_j(\bar w_j)[v_j^{r_j}]$. This proves
+\eqref{eq:jet-identity} and the lower-order vanishing.
+\end{proof}
+
+We also need a curvewise estimate for coordinates whose contact order is
+beyond the visible jet.
+
+\begin{lemma}[Inactive-coordinate order]\label{lem:inactive-order}
+If $a_j$ has contact order $r_j$ at $\bar w_j$ and
+$\gamma_j(t)=\bar w_j+O(t)$, then
+\[
+  a_j(\gamma_j(t))=O(|t|^{r_j}),
+  \qquad
+  \Phi_j(\gamma(t))=O(|t|^{r_j}).
+\]
+\end{lemma}
+
+\begin{proof}
+Taylor's theorem and the vanishing of all derivatives below $r_j$ give
+$a_j(\bar w_j+u)=O(\lVert u\rVert^{r_j})$. Every differentiable curve obeys
+$\gamma_j(t)-\bar w_j=O(t)$. The denominator $A(\gamma(t))$ remains bounded
+away from zero near $t=0$ because $A_0>0$, which proves the second estimate.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:convex}]
+Assume first that $\bar w$ is $q$-jet critical. Since $q\ge1$,
+Lemma~\ref{lem:first-order} gives active-gradient equality. For every inactive
+$j$ with $r_j\le q$, Lemma~\ref{lem:boundary-jet} and the evenness of $r_j$
+show that $g_j-\lambda$ cannot be negative. Thus
+\eqref{eq:visible-inequality} holds.
+
+Conversely, assume \eqref{eq:active-equality} and
+\eqref{eq:visible-inequality}. Let $\gamma$ be any $C^q$ curve through
+$\bar w$, write $x(t)=\Phi(\gamma(t))$, and use convexity at $\bar x$:
+\begin{align}
+  F(\gamma(t))-F(\bar w)
+  &\ge g^\top(x(t)-\bar x)\\
+  &=\sum_{j\notin S}(g_j-\lambda)x_j(t).
+  \label{eq:convex-bound}
+\end{align}
+The terms with $r_j\le q$ are nonnegative. By
+Lemma~\ref{lem:inactive-order}, each remaining term is
+$O(|t|^{r_j})=O(|t|^{q+1})$. Therefore
+\begin{equation}\label{eq:lower-order-bound}
+  F(\gamma(t))-F(\bar w)\ge -C|t|^{q+1}
+\end{equation}
+for some curve-dependent $C$ near zero.
+
+Suppose the first nonzero derivative of $F\circ\gamma$ through order $q$ has
+order $k$. Its Taylor expansion begins with $bt^k$ for $b\ne0$. If $k$ is
+odd, one of the two signs of $t$ makes $bt^k<0$ at order $k$. If $k$ is even
+and $b<0$, both signs do so. Either case contradicts
+\eqref{eq:lower-order-bound}, since $k\le q$. The first nonzero derivative is
+therefore even and positive. If none exists, all derivatives through $q$
+vanish. This is $q$-jet criticality.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:threshold}]
+First-order criticality follows from $q$-jet criticality, so
+Lemma~\ref{lem:first-order} supplies active-gradient equality. If an inactive
+$j$ violated $g_j\ge\lambda$, then $r_j\le q$ and
+Lemma~\ref{lem:boundary-jet} would give a negative first nonzero derivative of
+even order $r_j$ along $\gamma_j$. This contradicts $q$-jet criticality.
+Thus all simplex KKT inequalities hold.
+
+For sharpness, fix an inactive $j$ with $r_j>q$ and take $f(x)=-x_j$. For
+every $C^q$ curve $\gamma$ through $\bar w$,
+Lemma~\ref{lem:inactive-order} gives
+\[
+  (f\circ\Phi)(\gamma(t))=-\Phi_j(\gamma(t))=O(|t|^{r_j})=o(|t|^q).
+\]
+All derivatives through order $q$ vanish, so $\bar w$ is $q$-jet critical.
+At $\bar x$, however, $g_j=-1$ and $g_i=0$ on $S$, which violates the
+missing KKT inequality. In the full-support case, Lemma~\ref{lem:first-order}
+already supplies every KKT equality and no inequality is missing.
+\end{proof}
+
+\section{A boundary-jet certificate}\label{sec:certificate}
+
+Identity \eqref{eq:jet-identity} is useful independently of the threshold
+theorem. It gives a direct formula for a reduced cost from a single boundary
+jet. If the contact tensor is known, then
+\begin{equation}\label{eq:reduced-cost}
+  g_j-\lambda
+  =\frac{A_0}{D^{r_j}a_j(\bar w_j)[v_j^{r_j}]}
+   (F\circ\gamma_j)^{(r_j)}(0).
+\end{equation}
+Thus the sign of the missing simplex KKT inequality is encoded in the first
+nonzero boundary derivative. This certificate does not require convexity.
+
+The normalization in \eqref{eq:lift} is essential to the coefficient. Adding
+raw mass to coordinate $j$ simultaneously scales down all active coordinates.
+The combination $g_j-g^\top\bar x$, rather than $g_j$ alone, is the resulting
+directional derivative. Once the active derivatives agree,
+$g^\top\bar x=\lambda$ and the coefficient becomes the usual reduced cost.
+
+\section{Deep squared Hadamard products}\label{sec:hadamard}
+
+Consider $L$ vector factors $u_1,\ldots,u_L\in\R^n$ and define
+\begin{equation}\label{eq:deep-lift}
+  a_i(u)=\prod_{\ell=1}^L u_{\ell i}^2,
+  \qquad
+  \Phi_i(u)=\frac{\prod_{\ell=1}^L u_{\ell i}^2}
+  {\sum_{k=1}^n\prod_{\ell=1}^L u_{\ell k}^2}.
+\end{equation}
+This is block-separable after grouping the parameters by coordinates as
+$w_i=(u_{1i},\ldots,u_{Li})\in\R^L$.
+For a fixed coordinate $i$, let
+\[
+  z_i=\#\{\ell:u_{\ell i}=0\}
+\]
+be its zero multiplicity.
+
+\begin{proposition}[Zero multiplicity equals half the contact order]
+\label{prop:zero-multiplicity}
+At an inactive coordinate $i$ for \eqref{eq:deep-lift}, the contact order is
+\[
+  r_i=2z_i.
+\]
+At an active coordinate, the block gradient of $a_i$ is nonzero.
+\end{proposition}
+
+\begin{proof}
+For every zero factor, write its perturbation as $u_{\ell i}(t)=t v_{\ell i}$.
+Keep every nonzero factor fixed. If all chosen $v_{\ell i}$ are nonzero, then
+\[
+  a_i(u(t))
+  =t^{2z_i}
+   \left(\prod_{\ell:u_{\ell i}=0}v_{\ell i}^2\right)
+   \left(\prod_{\ell:u_{\ell i}\ne0}u_{\ell i}^2\right).
+\]
+The coefficient is positive. Every monomial in $a_i$ contains two copies of
+each zero factor, so no derivative of total order below $2z_i$ can be
+nonzero. This proves the contact order. If $a_i(u)>0$, every factor is
+nonzero and
+\[
+  \frac{\partial a_i}{\partial u_{\ell i}}
+  =2u_{\ell i}\prod_{p\ne\ell}u_{p i}^2\ne0,
+\]
+which proves active nondegeneracy.
+\end{proof}
+
+\begin{corollary}[Which missing coordinates the Hessian sees]
+\label{cor:hessian-visibility}
+Let $f$ be convex and twice continuously differentiable. A point of the deep
+lift \eqref{eq:deep-lift} is an ordinary second-order critical point of
+$f\circ\Phi$ if and only if
+\begin{align*}
+  g_i&=\lambda &&(i\in S),\\
+  g_j&\ge\lambda &&(j\notin S\text{ and }z_j=1).
+\end{align*}
+No KKT inequality is tested by the Hessian when $z_j\ge2$.
+More generally, $q$-jet criticality tests coordinate $j$ exactly when
+$2z_j\le q$.
+\end{corollary}
+
+\begin{proof}
+Combine Proposition~\ref{prop:zero-multiplicity} with
+Theorem~\ref{thm:convex}.
+\end{proof}
+
+The corollary distinguishes two boundary strata that look identical in
+simplex space. A missing coordinate with one zero factor is visible at second
+order. The same missing coordinate with several zero factors is invisible to
+the Hessian because its raw mass has flatter contact with the boundary.
+
+\section{Even-power lifts and exponentially many false second-order points}
+\label{sec:powers}
+
+The tied even-power lift
+\begin{equation}\label{eq:power-lift}
+  \Phi_i(u)=\frac{u_i^{2m}}{\sum_k u_k^{2m}},
+  \qquad m\ge1,
+\end{equation}
+has contact order $2m$ at every zero coordinate. When $m=1$, ordinary
+second-order stationarity sees every missing KKT inequality. When $m\ge2$,
+the Hessian sees none of them.
+
+The loss is substantial even for a strongly convex objective. Let
+\begin{equation}\label{eq:quadratic}
+  f(x)=\frac12\left\lVert x-\frac1n\mathbf1\right\rVert^2.
+\end{equation}
+Its unique simplex minimizer is the uniform point
+$x^\star=\mathbf1/n$. For every nonempty proper subset
+$S\subsetneq\{1,\ldots,n\}$, define the face-uniform point
+\[
+  x^S_i=
+  \begin{cases}
+    1/|S|,&i\in S,\\
+    0,&i\notin S.
+  \end{cases}
+\]
+and choose any $u^S$ with $u_i^{2m}$ constant and positive on $S$ and zero
+off $S$.
+
+\begin{proposition}[Exponential false second-order family]
+\label{prop:exponential}
+For every $m\ge2$, each $u^S$ is an ordinary second-order critical point of
+$f\circ\Phi$ under \eqref{eq:power-lift}, while $x^S$ is not simplex
+stationary. Hence the lift has at least $2^n-2$ distinct nonglobal
+second-order critical images.
+\end{proposition}
+
+\begin{proof}
+For \eqref{eq:quadratic},
+\[
+  g_i(x^S)=x^S_i-1/n.
+\]
+This quantity is constant on $S$, so active-gradient equality holds. Every
+inactive coordinate has contact order $2m>2$. Theorem~\ref{thm:convex} with
+$q=2$ therefore makes $u^S$ second-order critical.
+
+The active value is $\lambda=1/|S|-1/n>0$, whereas every inactive derivative
+is $g_j=-1/n<\lambda$. Thus every missing KKT inequality fails and $x^S$ is
+not stationary. Distinct nonempty proper subsets have distinct supports, so
+their images are distinct. There are $2^n-2$ such subsets.
+\end{proof}
+
+Proposition~\ref{prop:exponential} concerns critical points rather than local
+minima. Along a curve that activates a missing coordinate, the objective
+decreases first at order $2m$. The example shows why a Hessian-level landscape
+statement cannot be transferred uniformly through a flatter boundary lift.
+
+\section{Closest known results and novelty boundary}\label{sec:related}
+
+Li, McKenzie, and Yin analyze the Hadamard square parametrization of simplex
+and related constraints, including the correspondence between second-order
+stationarity in parametrized space and first-order stationarity in the
+original problem \cite{LiMcKenzieYin2023}. Levin, Kileel, and Boumal give a
+general theory of first- and second-order landscape preservation under smooth
+parametrizations \cite{LevinKileelBoumal2024}. Those results cover the standard
+square lift and supply the immediate order-two precedent for this work.
+
+Tang and Toh study Hadamard parametrization for composite optimization, while
+Ouyang and coauthors use Hadamard difference parametrizations in sparse
+optimization \cite{TangToh2024,OuyangEtAl2024}. Achour, Malgouyres, and
+Gerchinovitz classify second-order critical behavior in deep linear networks,
+another setting in which factor multiplicity changes the critical landscape
+\cite{AchourMalgouyresGerchinovitz2021}.
+
+Kolb, M\"uller, Bischl, and R\"ugamer give a 2026 synthesis of Hadamard
+overparametrization for sparse regularization, including deeper product maps
+and preservation of local minima through openness
+\cite{KolbEtAl2026}. Their framework makes depth an explicit modeling choice.
+It does not provide the finite-jet simplex KKT filtration proved here.
+
+Levin, Kileel, and Boumal explicitly list the general cost-independent
+``$k\Rightarrow1$'' problem as a future direction
+\cite{LevinKileelBoumal2024}. The precise claim advanced here is narrower than
+a general landscape theory.
+For normalized block-separable nonnegative simplex lifts, contact order gives
+an exact convex characterization at every finite jet, a sharp universal jet
+threshold for preservation of first-order simplex stationarity, and the
+zero-multiplicity rule $r_i=2z_i$ for deep squared Hadamard products. The
+standard square case $r_i=2$ is prior art and is included only as the first
+member of the order filtration.
+
+This novelty claim remains subject to independent literature review. In
+particular, higher-order optimality conditions, singular reparametrizations,
+and algebraic treatments of Hadamard-product models use several different
+terminologies. A result equivalent to the contact-order filtration may exist
+outside the references identified here.
+
+\section{Limitations and open questions}\label{sec:limitations}
+
+The analysis has several deliberate limits.
+\begin{enumerate}[label=(\roman*)]
+  \item Every inactive block is assumed to have finite contact order. Flat
+  smooth functions with all derivatives zero at the boundary are invisible to
+  every finite jet and require a non-Taylor analysis.
+  \item Active nondegeneracy is essential. If an active raw weight is itself
+  critical, first-order lifted stationarity need not force equality of active
+  objective derivatives.
+  \item Convexity is used for the sufficiency half of the exact finite-jet
+  characterization. The sharp universal threshold recovers first-order KKT
+  stationarity for nonconvex objectives but does not characterize all
+  nonconvex higher-order terms.
+  \item The theorem is local and qualitative. It does not give iteration
+  complexity, conditioning bounds, or an algorithm for escaping a high-order
+  flat saddle.
+  \item The framework addresses normalized block-separable lifts. Coupled raw
+  weights may mix inactive coordinates in their first nonzero homogeneous
+  terms and require a cone-valued contact invariant.
+\end{enumerate}
+
+Natural next questions include a coordinate-free extension to coupled maps,
+quantitative error bounds based on the smallest positive contact tensor, and
+algorithmic mechanisms that detect reduced costs without differentiating to
+order $r_{\max}$.
+
+\section{Conclusion}
+
+The singularity of a simplex lift at the boundary has an order, and that order
+controls which constrained stationarity conditions are visible. For
+normalized block-separable nonnegative lifts, the rule is exact: a finite jet
+tests precisely the inactive KKT inequalities whose contact orders it reaches.
+Deep Hadamard products turn zero multiplicity into contact order, making the
+gap between shallow and deep parametrizations explicit. This perspective
+provides a local diagnostic for landscape-transfer claims and a design rule
+for simplex parametrizations: boundary flatness beyond order two creates
+stationary behavior that the Hessian cannot detect.
+
+\bibliographystyle{plain}
+\bibliography{paper/references}
+
+\end{document}
