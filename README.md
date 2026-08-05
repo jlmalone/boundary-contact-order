@@ -34,6 +34,7 @@ The repository contains a complete draft proof and a bounded primary-literature 
 - [`docs/theorem.md`](docs/theorem.md): theorem and proof map in plain language
 - [`docs/literature-audit.md`](docs/literature-audit.md): closest results and exact novelty boundary
 - [`docs/verification.md`](docs/verification.md): static checks and future dynamic gates
+- [`docs/publication-roadmap.md`](docs/publication-roadmap.md): durable handoff, risks, decisions, and ordered path to submission
 - [`verification/verify_identities.main.kts`](verification/verify_identities.main.kts): dependency-free exact-rational transcription checks
 - [`submission/arxiv_metadata.md`](submission/arxiv_metadata.md): draft preprint metadata
 
@@ -51,3 +52,7 @@ The first command checks finite algebraic instances with exact rational arithmet
 ## Central contribution
 
 The proposed contribution is the boundary-contact threshold theorem and its zero-multiplicity law for deep Hadamard simplex factorizations. The square-lift second-order result is established prior art and appears here only as the contact-order-two case.
+
+## Where to resume
+
+Start with [`docs/publication-roadmap.md`](docs/publication-roadmap.md). It records what is complete, what remains unverified, the claims that must not drift, and the shortest defensible route from this research draft to a submission candidate.
